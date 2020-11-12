@@ -16,15 +16,16 @@ yblock = 400
 
 nol = 2
 
-def block(x,y,nol):
-    k = 0
-    while nol > k:
-        if k == 0:
-            screen.blit(blockimg, (x, ((y-(nol*40)))))
-        else:
-            for z in range(nol+2):
-                screen.blit(blockimg, ((x-60)+60*z, y))
-        k+=1
+class block():
+    def __init__(self, x, y, blockimg):
+        self.x = x
+        self.y = y
+        self.blockimg = blockimg
+
+    def elm(self):
+        screen.blit(self.blockimg, (self.x, self.y)
+                    
+one = block(xblock, yblock, blockimage)
 
 running = True
 while running:
@@ -35,6 +36,6 @@ while running:
         if events.type == pygame.QUIT:
             running = False
     
-    block(xblock, yblock, nol)
+    one.elm()
     
     pygame.display.update()
