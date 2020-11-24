@@ -55,15 +55,15 @@ ab = block(475,420,blockimage)
 gg = block(475,420,blockimage)
 gg.iscliked = True
 
-lista =  [[gg,gg,gg,gg,a,gg,gg,gg,gg],
-          [gg,gg,gg,b,c,d,gg,gg,gg],
-          [gg,gg,e,f,g,h,i,gg,gg],
-          [gg,j,k,l,m,n,o,p,gg],
+lista =  [[0,0,0,0,a,0,0,0,0],
+          [0,0,0,b,c,d,0,0,0],
+          [0,0,e,f,g,h,i,0,0],
+          [0,j,k,l,m,n,o,p,0],
           [r,s,t,u,w,y,z,aa,ab]]
 listb = [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u,w,y,z,aa,ab]
 
 
-turn = 3
+turn = 1
 p1score = 0
 p2score = 0
 
@@ -91,32 +91,48 @@ while running:
                 pass
             else:
                 temp = lista[vertrans][hoztrans]
-                temp.iscliked = True
-                columncliked = True
+                if temp != 0:
+                    temp.iscliked = True
+
+                rowcliked = True
 
                 for number in range(9):
-                    if lista[vertrans][number].iscliked == False:
-                        columncliked = False
-                if columncliked == True:
-                    addscore = 9-(lista.count("gg"))
+                    if lista[vertrans][number] != 0:
+                        if lista[vertrans][number].iscliked == False:
+                            rowcliked = False
+
+                if rowcliked == True:
+                    amountofspace = lista[vertrans]
+                    lettersrow = amountofspace.count(0)
+                    addscore = 9-lettersrow
                     if turn%2 != 0:
                         p1score += addscore
                     else:
                         p2score += addscore
                     addscore = 0
 
-                rowcliked = True
+                columncliked = True
+
                 for number in range(5):
-                    if lista[number][hoztrans].iscliked == False:
-                        rowcliked = False
-                if rowcliked == True:
-                    addscore = 9-(lista.count(gg))
+                    if lista[number][hoztrans] != 0:
+                        if lista[number][hoztrans].iscliked == False:
+                            columncliked = False
+
+                if columncliked == True:
+                    pointsneeded = 0
+                    for number in range(5):
+                        if lista[number][hoztrans] == 0:
+                            pointsneeded +=1
+
+                    addscore = 
+
                     if turn%2==0:
                         p2score += addscore
                     else:
                         p1score += addscore
                     addscore = 0
-                    turn +=1
+
+                turn +=1
 
 
     for element in listb:
@@ -129,9 +145,7 @@ while running:
                 element.blockimg = secblockimage
                 element.elm()
 
-
-
-
-
-
     pygame.display.update()
+    
+    print(p1score)
+    print(p2score)
