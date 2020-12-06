@@ -29,10 +29,15 @@ yblock = 200
 blockimage = pygame.image.load('basicblock.png')
 secblockimage = pygame.image.load('chosenblock.png')
 
+winner = "?"
+
 def show_score(x,y,text,wynik):
     score = font.render(text + str(wynik), True, (1,1,1))
     screen.blit(score, (x, y))
 
+def endscreen(winner):
+    text = font.render(f"Zwyciężył {winner}", True, (1,1,1))
+    screen.blit(text, (200, 650))
 
 class block():
     def __init__(self, x, y, blockimg):
@@ -155,13 +160,18 @@ while running:
     show_score(p2x, p2y, textp2, p2score)
 
     for element in listb:
-        if element == gg:
-            pass
+        if element.iscliked == False:
+                element.elm()
         else:
-            if element.iscliked == False:
-                element.elm()
-            else:
-                element.blockimg = secblockimage
-                element.elm()
+            element.blockimg = secblockimage
+            element.elm()\
 
+    if p1score + p2score == 50:
+        if p1score > p2score:
+            winner = "Gracz 1"
+            endscreen(winner)
+        else:
+            winner = "Gracz 2"
+            endscreen(winner)
     pygame.display.update()
+
