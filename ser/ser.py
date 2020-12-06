@@ -10,11 +10,29 @@ pygame.display.set_caption(" Ser")
 portret = pygame.image.load('ser.png')
 pygame.display.set_icon(portret)
 
+turn = 1
+p1score = 0
+p2score = 0
+
+font = pygame.font.Font('freesansbold.ttf', 20)
+
+p1x = 10
+p1y = 10
+textp1 = "Gracz 1:   "
+
+p2x = 450
+p2y = 10
+textp2 = "Gracz 2:   "
 
 xblock = 275
 yblock = 200
 blockimage = pygame.image.load('basicblock.png')
 secblockimage = pygame.image.load('chosenblock.png')
+
+def show_score(x,y,text,wynik):
+    score = font.render(text + str(wynik), True, (1,1,1))
+    screen.blit(score, (x, y))
+
 
 class block():
     def __init__(self, x, y, blockimg):
@@ -63,9 +81,7 @@ lista =  [[0,0,0,0,a,0,0,0,0],
 listb = [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,r,s,t,u,w,y,z,aa,ab]
 
 
-turn = 1
-p1score = 0
-p2score = 0
+
 
 running = True
 while running:
@@ -124,7 +140,7 @@ while running:
                         if lista[number][hoztrans] == 0:
                             pointsneeded +=1
 
-                    addscore = 
+                    addscore = 5 - pointsneeded
 
                     if turn%2==0:
                         p2score += addscore
@@ -134,6 +150,9 @@ while running:
 
                 turn +=1
 
+
+    show_score(p1x,p1y,textp1,p1score)
+    show_score(p2x, p2y, textp2, p2score)
 
     for element in listb:
         if element == gg:
@@ -146,6 +165,3 @@ while running:
                 element.elm()
 
     pygame.display.update()
-    
-    print(p1score)
-    print(p2score)
