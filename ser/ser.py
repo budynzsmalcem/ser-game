@@ -41,6 +41,9 @@ text2 = font.render("2 graczy", True, (1, 1, 1))
 text1rec = text1.get_rect()
 text2rec = text2.get_rect()
 
+addscore = 0
+one = 0
+
 def show_score(x,y,text,wynik):
     score = font.render(text + str(wynik), True, (1,1,1))
     screen.blit(score, (x, y))
@@ -149,6 +152,8 @@ while running:
                     game = 2
                     uncliked = False
 
+    startscore = p1score + p2score
+
 
     for events in pygame.event.get():
 
@@ -204,13 +209,69 @@ while running:
 
                     addscore = 5 - pointsneeded
 
-                    if turn%2==0:
-                        p2score += addscore
+                    if game == 2:
+                        if turn%2==0:
+                            p2score += addscore
+                        else:
+                            p1score += addscore
+
                     else:
                         p1score += addscore
                     addscore = 0
 
-                turn +=1
+
+
+
+    if game == 1:
+        if turn%2 == 0:
+            if one == 0:
+                yai, xai = ai(lista)
+                hoz = int(xai)
+                ver = int(yai)
+
+                if ver < 0 or ver > 4:
+                    pass
+                else:
+                    temp = lista[ver][hoz]
+                    if temp != 0:
+                        temp.iscliked = True
+
+                    rowcliked = True
+
+                    for number in range(9):
+                        if lista[ver][number] != 0:
+                            if lista[ver][number].iscliked == False:
+                                rowcliked = False
+
+                    if rowcliked == True:
+                        amountofspace = lista[ver]
+                        lettersrow = amountofspace.count(0)
+                        addscore = 9 - lettersrow
+                        if turn % 2 != 0:
+                            p1score += addscore
+                        else:
+                            p2score += addscore
+                        addscore = 0
+
+                    columncliked = True
+
+                    for number in range(5):
+                        if lista[number][hoz] != 0:
+                            if lista[number][hoz].iscliked == False:
+                                columncliked = False
+
+                    if columncliked == True:
+                        pointsneeded = 0
+                        for number in range(5):
+                            if lista[number][hoz] == 0:
+                                pointsneeded += 1
+
+                        addscore = 5 - pointsneeded
+                        one += 1
+            p2score += addscore
+            addscore = 0
+
+
 
 
     show_score(p1x,p1y,textp1,p1score)
@@ -230,4 +291,9 @@ while running:
         else:
             winner = "Gracz 2"
             endscreen(winner)
+    if startscore != p1score + p2score:
+        turn += 1
+
+    one = 0
+
     pygame.display.update()
