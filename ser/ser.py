@@ -56,12 +56,14 @@ def ai(lista):
     set = False
     aix=0
     aiy=0
-    while not set:
+    numberoftries = 0
+    while not set and numberoftries < 50:
         aix = randint(0,8)
         aiy = randint(0,4)
         if lista[aiy][aix] != 0:
-            if lista[aiy][aix].iscliked == False:
+            if lista[aiy][aix].iscliked is False:
                 set = True
+        numberoftries += 1
 
     return aix, aiy;
 
@@ -152,7 +154,13 @@ while running:
                     game = 2
                     uncliked = False
 
-    startscore = p1score + p2score
+    startblokscliked = 0
+
+    for blok in listb:
+        if blok.iscliked is True:
+            startblokscliked += 1
+
+
 
 
     for events in pygame.event.get():
@@ -221,68 +229,58 @@ while running:
 
 
 
-
     if game == 1:
         if turn%2 == 0:
-            if one == 0:
-                yai, xai = ai(lista)
-                hoz = int(xai)
-                ver = int(yai)
+            if p1score + p2score < 50:
 
-                if ver < 0 or ver > 4:
-                    pass
-                else:
-                    temp = lista[ver][hoz]
-                    if temp != 0:
-                        temp.iscliked = True
+                aix, aiy = ai(lista)
+                temp = lista[aiy][aix]
+                if temp != 0:
+                    temp.iscliked = True
 
-                    rowcliked = True
+                rowcliked = True
 
-                    for number in range(9):
-                        if lista[ver][number] != 0:
-                            if lista[ver][number].iscliked == False:
-                                rowcliked = False
+                for number in range(9):
+                    if lista[aiy][number] != 0:
+                        if lista[aiy][number].iscliked == False:
+                            rowcliked = False
 
-                    if rowcliked == True:
-                        amountofspace = lista[ver]
-                        lettersrow = amountofspace.count(0)
-                        addscore = 9 - lettersrow
-                        if turn % 2 != 0:
-                            p1score += addscore
-                        else:
-                            p2score += addscore
-                        addscore = 0
+                if rowcliked == True:
+                    amountofspace = lista[aiy]
+                    lettersrow = amountofspace.count(0)
+                    addscore = 9-lettersrow
 
-                    columncliked = True
+                    p2score += addscore
+                    addscore = 0
 
+                columncliked = True
+
+                for number in range(5):
+                    if lista[number][aix] != 0:
+                        if lista[number][aix].iscliked == False:
+                            columncliked = False
+
+                if columncliked == True:
+                    pointsneeded = 0
                     for number in range(5):
-                        if lista[number][hoz] != 0:
-                            if lista[number][hoz].iscliked == False:
-                                columncliked = False
+                        if lista[number][aix] == 0:
+                            pointsneeded += 1
 
-                    if columncliked == True:
-                        pointsneeded = 0
-                        for number in range(5):
-                            if lista[number][hoz] == 0:
-                                pointsneeded += 1
+                    addscore = 5 - pointsneeded
 
-                        addscore = 5 - pointsneeded
-                        one += 1
-            p2score += addscore
-            addscore = 0
+                    p2score += addscore
 
+                    addscore =0
 
+        show_score(p1x,p1y,textp1,p1score)
+        show_score(p2x, p2y, textp2, p2score)
 
-
-    show_score(p1x,p1y,textp1,p1score)
-    show_score(p2x, p2y, textp2, p2score)
-
-    for element in listb:
-        if element.iscliked == False:
+        for element in listb:
+            if element.iscliked == False:
+                    element.elm()
+            else:
+                element.blockimg = secblockimage
                 element.elm()
-        else:
-            element.blockimg = secblockimage
-            element.elm()
 
     if p1score + p2score >= 50:
         if p1score > p2score:
@@ -291,8 +289,16 @@ while running:
         else:
             winner = "Gracz 2"
             endscreen(winner)
-    if startscore != p1score + p2score:
+
+    endblockscliked = 0
+    for blok in listb:
+        if blok.iscliked is True:
+            endblockscliked += 1
+
+    if endblockscliked != startblokscliked:
         turn += 1
+
+
 
     one = 0
 
