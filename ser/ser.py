@@ -160,9 +160,6 @@ while running:
         if blok.iscliked is True:
             startblokscliked += 1
 
-
-
-
     for events in pygame.event.get():
 
         if events.type == pygame.QUIT:
@@ -228,7 +225,6 @@ while running:
                     addscore = 0
 
 
-
     if game == 1:
         if turn%2 == 0:
             if p1score + p2score < 50:
@@ -281,6 +277,17 @@ while running:
             else:
                 element.blockimg = secblockimage
                 element.elm()
+    else:
+        show_score(p1x,p1y,textp1,p1score)
+        show_score(p2x, p2y, textp2, p2score)
+
+        for element in listb:
+            if element.iscliked == False:
+                    element.elm()
+            else:
+                element.blockimg = secblockimage
+                element.elm()
+
 
     if p1score + p2score >= 50:
         if p1score > p2score:
@@ -297,8 +304,6 @@ while running:
 
     if endblockscliked != startblokscliked:
         turn += 1
-
-
 
     one = 0
 
